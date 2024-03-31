@@ -141,49 +141,6 @@ $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW())";
 
 
 
-    <video id="preview" autoplay></video>
-    
-
-
-             <!-- ============================================================== -->
-                    <!-- basic table  -->
-                    <!-- ============================================================== -->
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <h5 class="card-header">Teachers Attendance Logs</h5>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td name="text">Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td><button><a href="qrcode/generate.php">Generate</button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- end basic table  -->
-                    <!-- ============================================================== -->
-
-
 
             <!-- ============================================================== -->
             <!-- End Content -->
@@ -224,61 +181,6 @@ $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW())";
 
     <?php include "partial/foot.php"?>
 
-
-<script type="text/javascript">
-
-
-const video = document.getElementById('preview');
-let scanner = new Instascan.Scanner({ video: video });
-
-// Function to send scanned data to server
-function sendDataToServer(content) {
-    // Create a new XMLHttpRequest object
-    const xhr = new XMLHttpRequest();
-    
-    // Configure the request
-    xhr.open('POST', 'php/insert_dtr.php'); // Assuming your server-side script is named insertData.php
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    
-    // Define what happens on successful data submission
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alertify.set('notifier','position', 'bottom-right');
-          alertify.success(resp.msg);
-        } else {
-            console.error('Error sending data to server. Status:', xhr.status);
-        }
-    };
-    
-    // Define what happens in case of error
-    xhr.onerror = function() {
-        console.error('Request failed');
-    };
-    
-    // Send the request with the scanned content as JSON
-    xhr.send(JSON.stringify({ content: content }));
-}
-
-// Add listener for when a QR code is scanned
-scanner.addListener('scan', function(content) {
-    // alert('QR code scanned! Content: ' + content);
-    
-    // Send the scanned content to the server
-    sendDataToServer(content);
-});
-
-// Get available cameras and start scanning
-Instascan.Camera.getCameras().then(function(cameras) {
-    if (cameras.length > 0) {
-        scanner.start(cameras[0]);
-    } else {
-        console.error('No cameras found on this device.');
-    }
-}).catch(function(e) {
-    alert('Error accessing camera: ' + e);
-});
-
-</script>
 
 </body>
  
