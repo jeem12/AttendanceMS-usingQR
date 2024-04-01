@@ -25,7 +25,7 @@ date_default_timezone_set('Asia/Manila');
 $currentTime = date("H:i:s");
 
 if ($currentTime == "08:00:00") {
-    $query1 = "INSERT INTO `dtr` (`emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'ON TIME' FROM `employee` WHERE `emp_id` = $content";
+    $query1 = "INSERT INTO `dtr` (`emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'ON TIME' FROM `employee` WHERE `emp_id` = '$content'";
     $query_run1 = mysqli_query($conn, $query1);
 
     if ($query_run1) {
@@ -49,7 +49,7 @@ if ($currentTime == "08:00:00") {
         return;
     }
 }else if ($currentTime >= "08:00:00" && $currentTime <= "16:59:00"){
-    $query1 = "INSERT INTO `dtr` (`emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'LATE' FROM `employee` WHERE `emp_id` = $content";
+    $query1 = "INSERT INTO `dtr` (`emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'LATE' FROM `employee` WHERE `emp_id` = '$content'";
     $query_run1 = mysqli_query($conn, $query1);
 
     if ($query_run1) {
@@ -65,7 +65,7 @@ if ($currentTime == "08:00:00") {
         $xhr = [
             'status' => 500,
 
-            'message' => 'Failed',
+            'message' => 'Failed..', date('h:i a'),
 
 
         ];
@@ -73,7 +73,7 @@ if ($currentTime == "08:00:00") {
         return;
     }
 }else if($currentTime == "17:00:00"){
-    $query1 = "UPDATE `dtr` SET `time_out` = NOW() WHERE `emp_id` = $content `date` = CURRENT_DATE";
+    $query1 = "UPDATE `dtr` SET `time_out` = NOW() WHERE `emp_id` = '$content' AND `date` = CURRENT_DATE";
     $query_run1 = mysqli_query($conn, $query1);
 
     if ($query_run1) {
@@ -97,7 +97,7 @@ if ($currentTime == "08:00:00") {
         return;
     }
 }else if($currentTime >= "17:01:00" && $currentTime <= "23:59:00" || $currentTime >= "00:00:00" && $currentTime <= "07:59:00"){
-    $query1 = "UPDATE `dtr` SET `time_out`= NOW(), `status` = 'Overtime' WHERE `date` = CURRENT_DATE AND `emp_id` = $content";
+    $query1 = "UPDATE `dtr` SET `time_out`= NOW(), `status` = 'Overtime' WHERE `date` = CURRENT_DATE AND `emp_id` = '$content'";
     $query_run1 = mysqli_query($conn, $query1);
 
     if ($query_run1) {
@@ -125,7 +125,7 @@ if ($currentTime == "08:00:00") {
     $xhr = [
         'status' => 500,
 
-        'message' => 'Failed'
+        'message' => 'Failed.'
 
     ];
     echo json_encode($xhr);

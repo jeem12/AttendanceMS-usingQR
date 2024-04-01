@@ -259,6 +259,13 @@ load_data()
 
 
 
+$('#scan_qr').on('hidden.bs.modal', function (e) {
+                                    
+    scanner.stop();
+
+
+                            });
+
 $('#scan_qr').on('shown.bs.modal', function(e) { e.preventDefault();
                             
                 const video = document.getElementById('preview');
@@ -315,7 +322,7 @@ function sendDataToServer(content) {
 
             // Get available cameras and start scanning
             Instascan.Camera.getCameras().then(function(cameras) {
-                if (cameras.length > 0) {
+                if (cameras.length > 1) {
                     scanner.start(cameras[0]);
                 } else {
                     console.error('No cameras found on this device.');

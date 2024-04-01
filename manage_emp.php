@@ -255,18 +255,6 @@
 </body>
 
 <?php include "partial/foot.php"?>
-<script>
-        // Function to download QR Code
-        document.querySelector('.downloadQR').addEventListener('click', function() {
-        var canvas = document.getElementById('qrcode').querySelector('canvas');
-        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        var link = document.createElement('a');
-        link.download = 'qrcode.png';
-        link.href = image;
-        link.click();
-    });
-
-	</script>
 
 <script>
     var employee = '';
@@ -396,6 +384,18 @@ employee = $('#employee').DataTable({
                                     qrcode.clear();
                                     location.reload();
                             });
+
+                    // Function to download QR Code
+                    document.querySelector('.downloadQR').addEventListener('click', function() {
+                    var canvas = document.getElementById('qrcode').querySelector('canvas');
+                    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                    var filename = resp.data.f_name+" "+resp.data.l_name+"_"+resp.data.emp_id; // Example filename
+                    console.log("Generated Filename:", filename);
+                    var link = document.createElement('a');
+                    link.download = filename + '.png'; ;
+                    link.href = image;
+                    link.click();
+                });
 
                             $('#qr_modal').modal('show');
                             //qrcode.download(resp.data.f_name+" "+resp.data.l_name+"_"+resp.data.emp_id+"_"+"QR Code");
