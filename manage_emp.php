@@ -164,7 +164,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary downloadQR">Download</button>
                 </div>
                 </div>
             </div>
@@ -256,25 +256,16 @@
 
 <?php include "partial/foot.php"?>
 <script>
-		$(document).ready(function() {
-			// Bind change event to radio buttons
-			$('input[type=radio][name=level]').change(function() {
-				// Get selected category
-				var category = $(this).val();
-				// Fetch violin names for selected category
-				$.ajax({
-					url: '../assets/php/fetch_viol_names.php',
-					type: 'POST',
-					data: { category: category },
-					success: function(response) {
-						// Update select options with fetched violin names
-						$('#viol').html(response);
-					}
-				});
-			});
-		});
+        // Function to download QR Code
+        document.querySelector('.downloadQR').addEventListener('click', function() {
+        var canvas = document.getElementById('qrcode').querySelector('canvas');
+        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = 'qrcode.png';
+        link.href = image;
+        link.click();
+    });
 
-        
 	</script>
 
 <script>
@@ -407,7 +398,7 @@ employee = $('#employee').DataTable({
                             });
 
                             $('#qr_modal').modal('show');
-                            qrcode.download(resp.data.f_name+" "+resp.data.l_name+"_"+resp.data.emp_id+"_"+"QR Code");
+                            //qrcode.download(resp.data.f_name+" "+resp.data.l_name+"_"+resp.data.emp_id+"_"+"QR Code");
 
                         } else {
                             alert("An error occurred while fetching single data")
