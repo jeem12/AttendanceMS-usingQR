@@ -1,7 +1,6 @@
 <?php
   session_start();
   if (isset($_SESSION['ID'])) {
-      header("Location:index.php");
       exit();
   }
   // Include database connectivity
@@ -14,15 +13,25 @@
       $password = $conn->real_escape_string(md5($_POST['password']));
       
   if (!empty($username) || !empty($password)) {
-        $query  = "SELECT * FROM employee WHERE emp_id = '$username' AND password = '$password'";
+        $query  = "SELECT * FROM employee WHERE username = '$username' AND password = '$password'";
         $result = $conn->query($query);
         if($result->num_rows > 0){
+
             $row = $result->fetch_assoc();
-            $_SESSION['ID'] = $row['id'];
-            $_SESSION['ROLE'] = $row['role'];
-            $_SESSION['NAME'] = $row['f_name'] . $row['m_name'] . $row['l_name'];
-            header("Location:index.php");
-            die();                              
+            if ($row['username'] == 'admin') {
+              $_SESSION['ID'] = $row['emp_id'];
+              $_SESSION['USERNAME'] = $row['username'];
+              $_SESSION['NAME'] = $row['f_name'] . $row['m_name'] . $row['l_name'];
+              header("Location:index.php");
+              die();  
+            }else{
+              $_SESSION['ID'] = $row['emp_id'];
+              $_SESSION['USERNAME'] = $row['username'];
+              $_SESSION['NAME'] = $row['f_name'] . $row['m_name'] . $row['l_name'];
+              header("Location:user.php");
+              die();  
+            }
+             
         }else{
           $errorMsg = "No user found on this username";
         } 

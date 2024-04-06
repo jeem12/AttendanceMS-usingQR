@@ -27,4 +27,3 @@
     <script src="../assets/vendor/alertifyjs/alertify.min.js"></script>
 
     <script src="../assets/vendor/EasyQRCodeJS-master/dist/easy.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
- 

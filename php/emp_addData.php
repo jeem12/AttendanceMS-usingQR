@@ -7,7 +7,7 @@ if (isset($_POST['addData'])) {
 $fname = mysqli_real_escape_string($conn, $_POST['fname']);
 $mname = mysqli_real_escape_string($conn, $_POST['mname']);
 $lname = mysqli_real_escape_string($conn, $_POST['lname']);
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password securely
+$password = md5($_POST['password']); // Hash the password securely
 $b_day = mysqli_real_escape_string($conn, $_POST['b_day']);
 $comp_add = mysqli_real_escape_string($conn, $_POST['comp_add']);
 $contact = mysqli_real_escape_string($conn, $_POST['contact']);
@@ -15,6 +15,7 @@ $civil_status = mysqli_real_escape_string($conn, $_POST['civil_status']);
 $d_hired = mysqli_real_escape_string($conn, $_POST['d_hired']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
 $department = mysqli_real_escape_string($conn, $_POST['department']);
+$username = mysqli_real_escape_string($conn, $_POST['username']);
 
 // Generate a unique emp_id
 function generateRandomString($length = 8) {
@@ -50,9 +51,9 @@ while ($count > 0 && $maxAttempts > 0) {
 }
 
 if ($count == 0) {
-    $query = "INSERT INTO `employee` (`emp_id`, `f_name`, `m_name`, `l_name`, `password`, `b_day`, `comp_add`, `contact`, `gender`, `civil_stat`, `date_hired`, `department`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO `employee` (`username`,`emp_id`, `f_name`, `m_name`, `l_name`, `password`, `b_day`, `comp_add`, `contact`, `gender`, `civil_stat`, `date_hired`, `department`) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssssssssssss", $randomString, $fname, $mname, $lname, $password, $b_day, $comp_add, $contact, $gender, $civil_status, $d_hired, $department);
+    mysqli_stmt_bind_param($stmt, "sssssssssssss",$username, $randomString, $fname, $mname, $lname, $password, $b_day, $comp_add, $contact, $gender, $civil_status, $d_hired, $department);
     $result = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 

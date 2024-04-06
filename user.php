@@ -1,52 +1,82 @@
 <?php include "partial/head.php" ?>
 
+
 <body>
+
+
+
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
-    <div class="dashboard-main-wrapper">
-       <?php include "partial/nav.php"?>
+    <div class="dashboard-main-wrapper2">
+    
+     <!-- ============================================================== -->
+        <!-- navbar -->
+        <!-- ============================================================== -->
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <a class="navbar-brand" href="index.html">Attendance MS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../assets/images/logo.jpg" alt="" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name"><?= $_SESSION['USERNAME']?></h5>
+                                    <!-- <span class="status"></span><span class="ml-2">Online</span> -->
+                                </div>
+                                <a class="dropdown-item" href="php/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
        
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
+        <div class="dashboard-wrapper2">
             <div class="dashboard-ecommerce">
                 <div class="container-fluid dashboard-content ">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header">
-                                <h2 class="pageheader-title">Daily Time Record </h2>
-                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                                <div class="page-breadcrumb">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Daily Time Record</li>
-                                        </ol>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- end pageheader  -->
-                    <!-- ============================================================== -->
+
 
 
             <!-- ============================================================== -->
             <!-- Start Content -->
             <!-- ============================================================== -->
 
-            <!-- QR MODAL -->
-            <div id="scan_qr" class="modal" tabindex="-1">
-  <div class="modal-dialog">
+
+
+
+                            <!-- QR MODAL -->
+                            <!-- <div id="scan_qr" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                    </div>
+                                    <div class="modal-body">
+                                    <video id="preview" autoplay></video>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+ -->
+
+<!-- Modal -->
+<div class="modal fade" id="scan_qr" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-      </div>
       <div class="modal-body">
       <video id="preview" autoplay></video>
       </div>
@@ -58,15 +88,22 @@
 </div>
 
 
+
+
                     <!-- ============================================================== -->
                     <!-- basic table  -->
                     <!-- ============================================================== -->
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Teachers Attendance Logs</h5>
+                            
+                            <h5 class="card-header">Attendance Logs</h5>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first" id="dtr">
+                                    <table class="table table-striped table-bordered first" id="user">
+                                                    <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#scan_qr">
+            SCAN QR
+            </button>
                                         <thead>
                                             <tr>
                                                 <th>EMPLOYEE ID</th>
@@ -79,6 +116,37 @@
                                                 <th>STATUS</th>
                                             </tr>
                                         </thead>
+
+                                        
+                                        <tbody>
+                                            <?php 
+                                            require_once 'php/db_conn.php';
+                                            
+                                            $query = "SELECT * FROM `dtr` WHERE `username` = '{$_SESSION['USERNAME']}'";
+
+
+                                            if ($result = mysqli_query($conn, $query)) {
+                                                // Fetch one and one row
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                            ?>
+                                            <tr>
+                                                <td><?= $row['emp_id']?></td>
+                                                <td><?= $row['f_name']?></td>
+                                                <td><?= $row['m_name']?></td>
+                                                <td><?= $row['l_name']?></td>
+                                                <td><?= $row['department']?></td>
+                                                <td><?= $row['time_in']?></td>
+                                                <td><?= $row['time_out']?></td>
+                                                <td><?= $row['status']?></td>
+                                            </tr>
+                                            <?php 
+                                        }
+                                        mysqli_free_result($result);
+                                    }
+                                    ?>
+                                        </tbody>
+
+
                                     </table>
                                 </div>
                             </div>
@@ -88,11 +156,17 @@
                     <!-- end basic table  -->
                     <!-- ============================================================== -->
 
-
-
             <!-- ============================================================== -->
             <!-- End Content -->
             <!-- ============================================================== -->
+
+
+
+
+
+
+
+
 
 
             <!-- ============================================================== -->
@@ -126,151 +200,22 @@
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 
+
+
+    <?php include "partial/foot.php"?>
+
+
 </body>
 
 
-<?php include "partial/foot.php"?>
-
 <script>
 
-$('#scan_qr').on('hidden.bs.modal', function (e) {
-                                    
-                                    location.reload();
-                                
-                                
-                                                            });
-
-                                                            
-    var dtr = '';
-    $(function() {
-    // draw function [called if the database updates]
-    function draw_data() {
-        if ($.fn.dataTable.isDataTable('#dtr') && dtr != '') {
-            dtr.draw(true)
-        } else {
-            load_data();
-        }
-    }
-
-
-function load_data() {
-  dtr = $('#dtr').DataTable({
-      dom: '<"row"B>flr<"py-2 my-2"t>i',
-      "processing": true,
-      "serverSide": true,
-      "ajax": {
-          url: "../php/dtr_getData.php",
-          method: 'POST'
-      },
-      columns: [
-          {
-              data: 'emp_id',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'f_name',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'm_name',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'l_name',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'department',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'time_in',
-              className: 'text-center',
-              defaultValue: 'No data available'
-          },
-          {
-              data: 'time_out',
-              className: 'text-center',
-              defaultValue: 'No data available'
-          },
-          {
-              data: 'status',
-              className: 'text-center',
-              defaultValue: 'No data available'
-          },  
-      ],
-    //   responsive: {
-    //                 details: {
-    //                         display: $.fn.dataTable.Responsive.display.modal( {
-    //                                 header: function ( row ) {
-    //                                     var data = row.data();
-    //                                     return 'Details for '+data.last_name+', '+data.first_name;
-    //                                 }
-    //                             } ),
-
-    //                             renderer: $.fn.dataTable.Responsive.renderer.tableAll()
-    //             }
-
-    //         },
-
-    
-
-
-    //   drawCallback: function(settings) {
-    //     $('.delete_data').click(function() {
-    //             $.ajax({
-    //                 url: '../assets/php/c_getSingle.php',
-    //                 data: { id: $(this).attr('data-id') },
-    //                 method: 'POST',
-    //                 dataType: 'json',
-    //                 error: err => {
-    //                     alert("An error occurred while fetching single data")
-    //                 },
-    //                 success: function(resp) {
-    //                     if (!!resp.status) {
-    //                         $('#delete_modal').find('input[name="id"]').val(resp.data['id'])
-    //                         $('#delete_modal span[value=""]').text(resp.data.first_name+ " " +resp.data.last_name)
-    //                         $('#delete_modal').modal('show')
-    //                     } else {
-    //                         alert("An error occurred while fetching single data")
-    //                     }
-    //                 }
-    //             })
-    //         })
-    //   },
-      buttons: [{
-            text: '<i class="bi bi-plus-lg me-2"></i>Scan QR',
-            className: "button is-dark py-0 mb-2",
-            action: function(e, dt, node, config) {
-                $('#scan_qr').modal('show')
-            }
-        }],
-      "order": [
-          [1, "asc"]
-      ],
-      initComplete: function(settings) {
-          $('.paginate_button').addClass('p-1')
-      }
-  });
-}
-//Load Data
-load_data()
-
+$('#user').DataTable();
 
 
 $('#scan_qr').on('hidden.bs.modal', function (e) {
                                     
-    scanner.stop();
+    location.reload();
 
 
                             });
@@ -286,7 +231,7 @@ function sendDataToServer(content) {
     const xhr = new XMLHttpRequest();
     
     // Configure the request
-    xhr.open('POST', 'php/insert_dtr.php'); // Assuming your server-side script is named insertData.php
+    xhr.open('POST', 'php/insert_userDtr.php'); // Assuming your server-side script is named insertData.php
     xhr.setRequestHeader('Content-Type', 'application/json');
     
     // Define what happens on successful data submission
@@ -343,9 +288,7 @@ function sendDataToServer(content) {
         });
 
 
-
-
-});
 </script>
+
  
 </html>

@@ -60,6 +60,9 @@
 
 
             <div class="input-group mb-3">
+                <input type="text" class="form-control" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
                 <input type="text" class="form-control" name="fname" placeholder="First Name" aria-label="Username" aria-describedby="basic-addon1">
             </div>
             <div class="input-group mb-3">

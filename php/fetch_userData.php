@@ -1,8 +1,11 @@
 <?php 
 require_once("db_conn.php");
 extract($_POST);
+session_start();
 
-$totalCount = $conn->query("SELECT * FROM `dtr`")->num_rows;
+
+$totalCount = $conn->query("SELECT * FROM `dtr` WHERE `emp_id` = 'n1iZBprW'")->num_rows;
+
 $search_where = "";
 if(!empty($search)){
     $search_where = " where ";
