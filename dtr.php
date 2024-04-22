@@ -58,6 +58,31 @@
 </div>
 
 
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="delete_modal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form action="" id="delete-frm">
+                            <input type="hidden" name="id">
+                            <p>Are you sure you want to delete <b><span id="name" value=""></span></b> DTR?</p>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" form="delete-frm">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
                     <!-- ============================================================== -->
                     <!-- basic table  -->
                     <!-- ============================================================== -->
@@ -70,13 +95,13 @@
                                         <thead>
                                             <tr>
                                                 <th>EMPLOYEE ID</th>
-                                                <th>FIRT NAME</th>
-                                                <th>MIDDLE NAME</th>
-                                                <th>LAST NAME</th>
+                                                <th>FULL NAME</th>
                                                 <th>DEPARTMENT</th>
+                                                <th>DATE</th>
                                                 <th>TIME IN</th>
                                                 <th>TIME OUT</th>
                                                 <th>STATUS</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -170,25 +195,19 @@ function load_data() {
 
           },
           {
-              data: 'f_name',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'm_name',
-              className: 'text-center',
-              defaultValue: 'No data available'
-
-          },
-          {
-              data: 'l_name',
+              data: 'fname',
               className: 'text-center',
               defaultValue: 'No data available'
 
           },
           {
               data: 'department',
+              className: 'text-center',
+              defaultValue: 'No data available'
+
+          },
+          {
+              data: 'date',
               className: 'text-center',
               defaultValue: 'No data available'
 
@@ -207,7 +226,18 @@ function load_data() {
               data: 'status',
               className: 'text-center',
               defaultValue: 'No data available'
-          },  
+          },
+          {
+                    data: null,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function(data, type, row, meta) {
+                        console.log()
+                        return '<a class="btn btn-md rounded-4 mb-1 p-2 px-6 delete_data btn-danger" href="javascript:void(0)" data-id="' + (row.id) + '">Delete</a>';
+                    }
+                   
+            }
+            
       ],
     //   responsive: {
     //                 details: {
@@ -222,32 +252,28 @@ function load_data() {
     //             }
 
     //         },
-
-    
-
-
-    //   drawCallback: function(settings) {
-    //     $('.delete_data').click(function() {
-    //             $.ajax({
-    //                 url: '../assets/php/c_getSingle.php',
-    //                 data: { id: $(this).attr('data-id') },
-    //                 method: 'POST',
-    //                 dataType: 'json',
-    //                 error: err => {
-    //                     alert("An error occurred while fetching single data")
-    //                 },
-    //                 success: function(resp) {
-    //                     if (!!resp.status) {
-    //                         $('#delete_modal').find('input[name="id"]').val(resp.data['id'])
-    //                         $('#delete_modal span[value=""]').text(resp.data.first_name+ " " +resp.data.last_name)
-    //                         $('#delete_modal').modal('show')
-    //                     } else {
-    //                         alert("An error occurred while fetching single data")
-    //                     }
-    //                 }
-    //             })
-    //         })
-    //   },
+      drawCallback: function(settings) {
+        $('.delete_data').click(function() {
+                $.ajax({
+                    url: 'php/dtr_getSingle.php',
+                    data: { id: $(this).attr('data-id') },
+                    method: 'POST',
+                    dataType: 'json',
+                    error: err => {
+                        alert("An error occurred while fetching single data")
+                    },
+                    success: function(resp) {
+                        if (!!resp.status) {
+                            $('#delete_modal').find('input[name="id"]').val(resp.data['id'])
+                            $('#delete_modal span[value=""]').text(resp.data.f_name+ " " +resp.data.l_name)
+                            $('#delete_modal').modal('show')
+                        } else {
+                            alert("An error occurred while fetching single data")
+                        }
+                    }
+                })
+            })
+      },
       buttons: [{
             text: '<i class="bi bi-plus-lg me-2"></i>Scan QR',
             className: "button is-dark py-0 mb-2",
@@ -268,12 +294,50 @@ load_data()
 
 
 
+      // DELETE Data
+      $('#delete-frm').submit(function(e) {
+        e.preventDefault()
+        $('#delete_modal button').attr('disabled', true)
+        $('#delete_modal button[form="delete-frm"]').text("Deleting data ...")
+        $.ajax({
+            url: 'php/dtr_deleteData.php',
+            data: $(this).serialize(),
+            method: 'POST',
+            dataType: "json",
+            error: err => {
+                alert("An error occurred. Please check the source code and try again")
+            },
+            success: function(resp) {
+                if (!!resp.status) {
+                    if (resp.status == 'success') {
+                        alertify.set('notifier','position', 'bottom-right');
+                        alertify.success(resp.msg);
+                        $('#delete-frm').get(0).reset()
+                        $('.modal').modal('hide')
+                        draw_data();
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        alertify.set('notifier','position', 'bottom-right');
+                        alertify.error(resp.msg);
+                    } else {
+                        alert("An error occurred. Please check the source code and try again")
+                    }
+                } else {
+                    alert("An error occurred. Please check the source code and try again")
+                }
+
+                $('#delete_modal button').attr('disabled', false)
+                $('#delete_modal button[form="delete-frm"]').text("Yes")
+            }
+        })
+    })
+
+
 $('#scan_qr').on('hidden.bs.modal', function (e) {
                                     
-    scanner.stop();
+   scanner.stop();
 
 
-                            });
+                           });
 
 $('#scan_qr').on('shown.bs.modal', function(e) { e.preventDefault();
                             
@@ -338,9 +402,9 @@ function sendDataToServer(content) {
                 }
             }).catch(function(e) {
                 alert('Error accessing camera: ' + e);
-            });
+         });
 
-        });
+  });
 
 
 

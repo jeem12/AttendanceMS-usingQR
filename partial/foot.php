@@ -18,12 +18,12 @@
     <script src="assets/libs/js/dashboard-ecommerce.js"></script>
 
 
-    <script src="../assets/vendor/instascan.min.js"></script>
+    <script src="assets/vendor/instascan.min.js"></script>
 
-    <script src="../assets/vendor/datatables/datatables.min.js"></script>
+    <script src="assets/vendor/datatables/datatables.min.js"></script>
 
 
     <!-- include the script -->
-    <script src="../assets/vendor/alertifyjs/alertify.min.js"></script>
+    <script src="assets/vendor/alertifyjs/alertify.min.js"></script>
 
-    <script src="../assets/vendor/EasyQRCodeJS-master/dist/easy.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="assets/vendor/EasyQRCodeJS-master/dist/easy.qrcode.min.js" type="text/javascript" charset="utf-8"></script>

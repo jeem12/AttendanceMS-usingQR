@@ -34,11 +34,14 @@ $recordsFiltered= $recordsFilterCount;
 $data = array();
 $i= 1 + $start;
 while($row = $query->fetch_assoc()){
+    
     $row['time_in'] = date("h:i a", strtotime($row['time_in']));
-
+    $row['fname'] = $row['f_name'].' '.$row['m_name'].' '.$row['l_name'];
+    $row['date'] = date("M d, Y", strtotime($row['date']));
 
     if (!empty($row['time_out'])) {
         $row['time_out'] = date("h:i a", strtotime($row['time_out']));
+
     }
 
 

@@ -48,7 +48,7 @@ if ($currentTime == "08:00:00") {
         echo json_encode($xhr);
         return;
     }
-}else if ($currentTime >= "08:00:00" && $currentTime <= "16:59:00"){
+}else if ($currentTime >= "08:01:00" && $currentTime <= "12:00:00"){
     $query1 = "INSERT INTO `dtr` (`username`, `emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `username`, `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'LATE' FROM `employee` WHERE `emp_id` = '$content'";
     $query_run1 = mysqli_query($conn, $query1);
 
@@ -72,6 +72,32 @@ if ($currentTime == "08:00:00") {
         echo json_encode($xhr);
         return;
     }
+}
+else if ($currentTime >= "12:01:00" && $currentTime <= "16:59:00"){
+    $query1 = "INSERT INTO `dtr` (`username`, `emp_id`, `f_name`, `m_name`, `l_name`, `department`,`date`,`time_in`,`status`) SELECT `username`, `emp_id`, `f_name`, `m_name`, `l_name`, `department`, NOW(), NOW(), 'UNDER TIME / HALF DAY' FROM `employee` WHERE `emp_id` = '$content'";
+    $query_run1 = mysqli_query($conn, $query1);
+
+    if ($query_run1) {
+        $xhr = [
+            'status' => 200,
+
+            'message' => 'Success'
+
+        ];
+        echo json_encode($xhr);
+        return;
+    }else {
+        $xhr = [
+            'status' => 500,
+
+            'message' => 'Failed'
+
+
+        ];
+        echo json_encode($xhr);
+        return;
+    }
+
 }else if($currentTime == "17:00:00"){
     $query1 = "UPDATE `dtr` SET `time_out` = NOW() WHERE `emp_id` = '$content' AND `date` = CURRENT_DATE";
     $query_run1 = mysqli_query($conn, $query1);

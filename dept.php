@@ -95,7 +95,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger" form="delete-frm">Yes</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
@@ -204,7 +204,7 @@ $(function() {
                     className: 'text-center',
                     render: function(data, type, row, meta) {
                         console.log()
-                        return '<a class="btn btn-md rounded-4 mb-1 p-2 px-6 delete_data btn-primary" href="javascript:void(0)" data-id="' + (row.id) + '">Delete</a>';
+                        return '<a class="btn btn-md rounded-4 mb-1 p-2 px-6 delete_data btn-danger" href="javascript:void(0)" data-id="' + (row.id) + '">Delete</a>';
                     }
                    
             }
