@@ -10,10 +10,16 @@
   if (isset($_POST['submit'])) {
       $errorMsg = "";
       $username = $conn->real_escape_string($_POST['username']);
-      $password = $conn->real_escape_string(md5($_POST['password']));
+      $password = $conn->real_escape_string($_POST['password']);
+
+      $ciphering = "aes-256-ctr";
+    $option = 0;
+    $encryption_iv = '1234567890123456';
+    $encryption_key = 'devanshu';
+    $encryption = openssl_encrypt($password, $ciphering, $encryption_key, $option, $encryption_iv);
       
   if (!empty($username) || !empty($password)) {
-        $query  = "SELECT * FROM employee WHERE username = '$username' AND password = '$password'";
+        $query  = "SELECT * FROM employee WHERE username = '$username' AND password = '$encryption'";
         $result = $conn->query($query);
         if($result->num_rows > 0){
 
@@ -46,8 +52,8 @@
   <title>Attendance MS - Login</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+  <script src="assets/vendor/jquery/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <div class="card text-center" style="padding:20px;">
@@ -57,9 +63,16 @@
     <div class="col-md-3"></div>
       <div class="col-md-6">
         <?php if (isset($errorMsg)) { ?>
-          <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <?php echo $errorMsg; ?>
+          <!-- <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" datadismiss="alert">&times;</button>
+
+          </div> -->
+
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><?php echo $errorMsg; ?>!</strong><br> Double check <strong>username</strong> and <strong>password</strong>.
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"> -->
+              <!-- <span aria-hidden="true">&times;</span> -->
+            <!-- </button> -->
           </div>
         <?php } ?>
         <form action="" method="POST">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2024 at 09:48 AM
+-- Generation Time: May 19, 2024 at 02:46 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,9 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `att`
 --
-DROP DATABASE IF EXISTS `att`;
-CREATE DATABASE IF NOT EXISTS `att` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `att`;
 
 -- --------------------------------------------------------
 
@@ -30,10 +27,10 @@ USE `att`;
 -- Table structure for table `department`
 --
 
-CREATE TABLE IF NOT EXISTS `department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `d_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS `department`;
+CREATE TABLE `department` (
+  `id` int(11) NOT NULL,
+  `d_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -42,8 +39,10 @@ CREATE TABLE IF NOT EXISTS `department` (
 -- Table structure for table `dtr`
 --
 
-CREATE TABLE IF NOT EXISTS `dtr` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `dtr`;
+CREATE TABLE `dtr` (
+  `id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `emp_id` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `f_name` varchar(255) NOT NULL,
@@ -53,8 +52,7 @@ CREATE TABLE IF NOT EXISTS `dtr` (
   `date` date NOT NULL,
   `time_in` time NOT NULL,
   `time_out` time DEFAULT NULL,
-  `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `status` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -63,8 +61,9 @@ CREATE TABLE IF NOT EXISTS `dtr` (
 -- Table structure for table `employee`
 --
 
-CREATE TABLE IF NOT EXISTS `employee` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee` (
+  `id` int(11) NOT NULL,
   `emp_id` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -77,16 +76,59 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `gender` varchar(255) NOT NULL,
   `civil_stat` varchar(255) NOT NULL,
   `date_hired` date NOT NULL,
-  `department` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `department` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `employee`
 --
 
-REPLACE INTO `employee` (`id`, `emp_id`, `username`, `password`, `f_name`, `m_name`, `l_name`, `b_day`, `comp_add`, `contact`, `gender`, `civil_stat`, `date_hired`, `department`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', '0000-00-00', 'admin');
+INSERT INTO `employee` (`id`, `emp_id`, `username`, `password`, `f_name`, `m_name`, `l_name`, `b_day`, `comp_add`, `contact`, `gender`, `civil_stat`, `date_hired`, `department`) VALUES
+(1, 'admin', 'admin', 'Sv9rcHs=', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin', '0000-00-00', 'admin');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dtr`
+--
+ALTER TABLE `dtr`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `employee`
+--
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `department`
+--
+ALTER TABLE `department`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `dtr`
+--
+ALTER TABLE `dtr`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employee`
+--
+ALTER TABLE `employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

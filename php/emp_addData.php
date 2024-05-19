@@ -7,7 +7,15 @@ if (isset($_POST['addData'])) {
 $fname = mysqli_real_escape_string($conn, $_POST['fname']);
 $mname = mysqli_real_escape_string($conn, $_POST['mname']);
 $lname = mysqli_real_escape_string($conn, $_POST['lname']);
-$password = md5($_POST['password']); // Hash the password securely
+$password = mysqli_real_escape_string($conn, $_POST['password']) ;
+
+    $ciphering = "aes-256-ctr";
+    $option = 0;
+    $encryption_iv = '1234567890123456';
+    $encryption_key = 'devanshu';
+    $encryption = openssl_encrypt($password, $ciphering, $encryption_key, $option, $encryption_iv);
+
+
 $b_day = mysqli_real_escape_string($conn, $_POST['b_day']);
 $comp_add = mysqli_real_escape_string($conn, $_POST['comp_add']);
 $contact = mysqli_real_escape_string($conn, $_POST['contact']);
@@ -53,7 +61,7 @@ while ($count > 0 && $maxAttempts > 0) {
 if ($count == 0) {
     $query = "INSERT INTO `employee` (`username`,`emp_id`, `f_name`, `m_name`, `l_name`, `password`, `b_day`, `comp_add`, `contact`, `gender`, `civil_stat`, `date_hired`, `department`) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "sssssssssssss",$username, $randomString, $fname, $mname, $lname, $password, $b_day, $comp_add, $contact, $gender, $civil_status, $d_hired, $department);
+    mysqli_stmt_bind_param($stmt, "sssssssssssss",$username, $randomString, $fname, $mname, $lname, $encryption, $b_day, $comp_add, $contact, $gender, $civil_status, $d_hired, $department);
     $result = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 

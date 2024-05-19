@@ -46,9 +46,10 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+        <h5>SCAN YOUR QR</h5>
       </div>
       <div class="modal-body">
-      <video id="preview" autoplay></video>
+      <video id="preview" autoplay style="width: 100%; height: auto;"></video>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -56,6 +57,27 @@
     </div>
   </div>
 </div>
+
+            <!-- CAPTURE IMAGE MODAL -->
+            <div id="cap_img" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>CAPTURE IMAGE</h5>
+      </div>
+      <div class="modal-body">
+      <div class="camera">
+      <video id="camera-preview" autoplay style="width: 100%; height: auto;"></video>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="capture-button" class="btn btn-secondary" >Take Photo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -83,6 +105,54 @@
     </div>
 
 
+    
+                <!-- Edit Modal -->
+                <div class="modal fade" id="edit_modal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit <b><span id="name" value=""></span></b> Data</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form action="" id="edit-frm">
+                            <input type="hidden" name="id">
+                            <div class="form-input">
+                                <label for="time_in">Date</label>
+                                <input type="date" name="date" required>
+                            </div>
+                            <div class="form-input">
+                                <label for="time_in">Time In</label>
+                                <input type="time" name="time_in" min="08:00" max="16:59" required>
+                            </div>
+                            <div class="form-input">
+                                <label for="time_in">Time Out</label>
+                                <input type="time" name="time_out" min="17:00" max="07:59" required>
+                            </div>
+                            <div class="form-input">
+                            <label for="status">Status:</label>
+
+                            <select name="status" id="status" required>
+                            <option disabled selected value="">--Please choose an option--</option>
+                            <option value="1">Time In</option>
+                            <option value="2">Time Out</option>
+                            <option value="3">Overtime</option>
+                            </select>
+                            </div>
+
+
+                            
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="edit-frm">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
                     <!-- ============================================================== -->
                     <!-- basic table  -->
                     <!-- ============================================================== -->
@@ -95,13 +165,14 @@
                                         <thead>
                                             <tr>
                                                 <th>EMPLOYEE ID</th>
+                                                <th>IMAGE</th>
                                                 <th>FULL NAME</th>
                                                 <th>DEPARTMENT</th>
                                                 <th>DATE</th>
                                                 <th>TIME IN</th>
                                                 <th>TIME OUT</th>
                                                 <th>STATUS</th>
-                                                <th>ACTION</th>
+                                                <th data-priority="1">ACTION</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -120,28 +191,6 @@
             <!-- ============================================================== -->
 
 
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <div class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
         <!-- end wrapper  -->
@@ -158,12 +207,9 @@
 
 <script>
 
-$('#scan_qr').on('hidden.bs.modal', function (e) {
-                                    
-                                    location.reload();
-                                
-                                
-                                                            });
+        $('#cap_img').on('hidden.bs.modal', function (e) {                              
+            // location.reload();                             
+        });
 
                                                             
     var dtr = '';
@@ -180,7 +226,7 @@ $('#scan_qr').on('hidden.bs.modal', function (e) {
 
 function load_data() {
   dtr = $('#dtr').DataTable({
-      dom: '<"row"B>flr<"py-2 my-2"t>i',
+      dom: 'flr<"py-2 my-2"t>i',
       "processing": true,
       "serverSide": true,
       "ajax": {
@@ -190,6 +236,12 @@ function load_data() {
       columns: [
           {
               data: 'emp_id',
+              className: 'text-center',
+              defaultValue: 'No data available'
+
+          },
+          {
+              data: 'image_data',
               className: 'text-center',
               defaultValue: 'No data available'
 
@@ -233,25 +285,29 @@ function load_data() {
                     className: 'text-center',
                     render: function(data, type, row, meta) {
                         console.log()
-                        return '<a class="btn btn-md rounded-4 mb-1 p-2 px-6 delete_data btn-danger" href="javascript:void(0)" data-id="' + (row.id) + '">Delete</a>';
+                        return '<a class="btn btn-md rounded-4 mb-1 p-2 px-6 delete_data btn-danger" href="javascript:void(0)" data-id="' + (row.id) + '">Delete</a><a class="btn btn-md rounded-4 mb-1 p-2 px-6 edit_data btn-primary" href="javascript:void(0)" data-id="' + (row.id) + '">Edit</a>';
                     }
                    
             }
             
       ],
-    //   responsive: {
-    //                 details: {
-    //                         display: $.fn.dataTable.Responsive.display.modal( {
-    //                                 header: function ( row ) {
-    //                                     var data = row.data();
-    //                                     return 'Details for '+data.last_name+', '+data.first_name;
-    //                                 }
-    //                             } ),
-
-    //                             renderer: $.fn.dataTable.Responsive.renderer.tableAll()
-    //             }
-
-    //         },
+      columnDefs: [
+                      {
+                          targets: 7,
+                          render: function(data, type, row, meta) {
+                              if (data == 1) {
+                                  return '<p class="badge badge-success text-wrap text-center">ACTIVE</p>';
+                              } else if (data == 2) {
+                                  return '<p class="badge badge-warning text-wrap text-center">TIMED OUT</p>';
+                              }
+                              else if (data == 3) {
+                                  return '<p class="badge badge-danger text-wrap text-center">OVERTIME</p>';
+                              } else {
+                                  return '<p class="badge text-bg-warning text-wrap text-center">Undefined Status</p>';
+                              }
+                          }
+                      }
+          ],
       drawCallback: function(settings) {
         $('.delete_data').click(function() {
                 $.ajax({
@@ -272,15 +328,28 @@ function load_data() {
                         }
                     }
                 })
+            }),
+            $('.edit_data').click(function() {
+                $.ajax({
+                    url: 'php/dtr_getSingle.php',
+                    data: { id: $(this).attr('data-id') },
+                    method: 'POST',
+                    dataType: 'json',
+                    error: err => {
+                        alert("An error occurred while fetching single data")
+                    },
+                    success: function(resp) {
+                        if (!!resp.status) {
+                            $('#edit_modal').find('input[name="id"]').val(resp.data['id'])
+                            $('#edit_modal span[value=""]').text(resp.data.f_name+ " " +resp.data.l_name)
+                            $('#edit_modal').modal('show')
+                        } else {
+                            alert("An error occurred while fetching single data")
+                        }
+                    }
+                })
             })
       },
-      buttons: [{
-            text: '<i class="bi bi-plus-lg me-2"></i>Scan QR',
-            className: "button is-dark py-0 mb-2",
-            action: function(e, dt, node, config) {
-                $('#scan_qr').modal('show')
-            }
-        }],
       "order": [
           [1, "asc"]
       ],
@@ -332,81 +401,42 @@ load_data()
     })
 
 
-$('#scan_qr').on('hidden.bs.modal', function (e) {
-                                    
-   scanner.stop();
-
-
-                           });
-
-$('#scan_qr').on('shown.bs.modal', function(e) { e.preventDefault();
-                            
-                const video = document.getElementById('preview');
-                let scanner = new Instascan.Scanner({ video: video });
-
-                // Function to send scanned data to server
-function sendDataToServer(content) {
-    // Create a new XMLHttpRequest object
-    const xhr = new XMLHttpRequest();
-    
-    // Configure the request
-    xhr.open('POST', 'php/insert_dtr.php'); // Assuming your server-side script is named insertData.php
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    
-    // Define what happens on successful data submission
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            // Parse the JSON response
-        var response = JSON.parse(xhr.responseText);
-        
-        // Access the message from the response object
-        var message = response.message;
-
-            alertify.set('notifier','position', 'bottom-right');
-            alertify.success(message);
-        } else {
-                 // Parse the JSON response
-        var response = JSON.parse(xhr.responseText);
-        
-        // Access the message from the response object
-        var message = response.message;
-
-            alertify.set('notifier','position', 'bottom-right');
-            alertify.error(message);
-        }
-                };
-                
-                // Define what happens in case of error
-                xhr.onerror = function() {
-                    console.error('Request failed');
-                };
-                
-                // Send the request with the scanned content as JSON
-                xhr.send(JSON.stringify({ content: content }));
-            }
-
-            // Add listener for when a QR code is scanned
-            scanner.addListener('scan', function(content) {
-                // alert('QR code scanned! Content: ' + content);
-                
-                // Send the scanned content to the server
-                sendDataToServer(content);
-            });
-
-            // Get available cameras and start scanning
-            Instascan.Camera.getCameras().then(function(cameras) {
-                if (cameras.length > 1) {
-                    scanner.start(cameras[0]);
+    // Edit Data
+    $('#edit-frm').submit(function(e) {
+        e.preventDefault()
+        $('#edit_modal button').attr('disabled', true)
+        $('#edit_modal button[form="edit-frm"]').text("Editing data ...")
+        $.ajax({
+            url: 'php/dtr_editData.php',
+            data: $(this).serialize(),
+            method: 'POST',
+            dataType: "json",
+            error: err => {
+                alert("An error occurred. Please check the source code and try again")
+            },
+            success: function(resp) {
+                if (!!resp.status) {
+                    if (resp.status == 'success') {
+                        alertify.set('notifier','position', 'bottom-right');
+                        alertify.success(resp.msg);
+                        $('#edit-frm').get(0).reset()
+                        $('.modal').modal('hide')
+                        draw_data();
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        alertify.set('notifier','position', 'bottom-right');
+                        alertify.error(resp.msg);
+                    } else {
+                        alert("An error occurred. Please check the source code and try again")
+                    }
                 } else {
-                    console.error('No cameras found on this device.');
+                    alert("An error occurred. Please check the source code and try again")
                 }
-            }).catch(function(e) {
-                alert('Error accessing camera: ' + e);
-         });
 
-  });
-
-
+                $('#edit_modal button').attr('disabled', false)
+                $('#edit_modal button[form="edit-frm"]').text("Yes")
+            }
+        })
+    })
 
 
 });

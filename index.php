@@ -44,17 +44,16 @@
             <!-- ============================================================== -->
             <!-- Start Content -->
             <!-- ============================================================== -->
-
-
-
             <div class="ecommerce-widget">
-
             <div class="row">
-                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="text-muted">Total Employee This Month</h5>
-                            <?php 
+
+                        <!-- ============================================================== -->
+                        <!-- total followers   -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                <?php 
 require_once "php/db_conn.php";
 $query = "SELECT COUNT(id) AS total FROM `employee` WHERE YEAR(date_hired) = YEAR(NOW()) AND MONTH(date_hired) = MONTH(NOW())";
                     $query_run = mysqli_query($conn, $query);
@@ -63,21 +62,32 @@ $query = "SELECT COUNT(id) AS total FROM `employee` WHERE YEAR(date_hired) = YEA
                     {
                         $row = mysqli_fetch_assoc($query_run);
 ?>
-                            <div class="metric-value d-inline-block">
-                                <h1 class="mb-1"><?= $row['total']?></h1>
-                            </div>
-
-                            <?php 
+                                    <div class="d-inline-block">
+                                        <h5 class="text-muted">Total Employee <small>| MONTH</small></h5>
+                                        <h2 class="mb-0"><?= $row['total']?></h2>
+                                    </div>
+                                    <div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+                                        <i class="fa fa-user fa-fw fa-sm text-primary"></i>
+                                    </div>
+                                    <?php 
                             }
                             ?>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-body">
-                        <h5 class="text-muted">Total Logs This Month</h5>
-                            <?php 
+                        <!-- ============================================================== -->
+                        <!-- end total followers   -->
+                        <!-- ============================================================== -->
+
+
+
+                                    <!-- ============================================================== -->
+                        <!-- total followers   -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                <?php 
 require_once "php/db_conn.php";
 $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW()) AND MONTH(date) = MONTH(NOW())";
                     $query_run = mysqli_query($conn, $query);
@@ -86,21 +96,33 @@ $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW()) AN
                     {
                         $row = mysqli_fetch_assoc($query_run);
 ?>
-                            <div class="metric-value d-inline-block">
-                                <h1 class="mb-1"><?= $row['total']?></h1>
-                            </div>
-
-                            <?php 
+                                    <div class="d-inline-block">
+                                        <h5 class="text-muted">Total Logs <small>| MONTH</small></h5>
+                                        <h2 class="mb-0"><?= $row['total']?></h2>
+                                    </div>
+                                    <div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+                                        <i class="fa fa-address-book fa-fw fa-sm text-primary"></i>
+                                    </div>
+                                    <?php 
                             }
                             ?>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="text-muted">Total Employees This Year</h5>
-                            <?php 
+                        <!-- ============================================================== -->
+                        <!-- end total followers   -->
+                        <!-- ============================================================== -->
+
+
+
+                        
+                                    <!-- ============================================================== -->
+                        <!-- total followers   -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                <?php 
 require_once "php/db_conn.php";
 $query = "SELECT COUNT(id) AS total FROM `employee` WHERE YEAR(date_hired) = YEAR(NOW())";
                     $query_run = mysqli_query($conn, $query);
@@ -109,20 +131,32 @@ $query = "SELECT COUNT(id) AS total FROM `employee` WHERE YEAR(date_hired) = YEA
                     {
                         $row = mysqli_fetch_assoc($query_run);
 ?>
-                            <div class="metric-value d-inline-block">
-                                <h1 class="mb-1"><?= $row['total']?></h1>
-                            </div>
-                            <?php 
+                                    <div class="d-inline-block">
+                                        <h5 class="text-muted">Total Employee <small>| YEAR</small></h5>
+                                        <h2 class="mb-0"><?= $row['total']?></h2>
+                                    </div>
+                                    <div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
+                                        <i class="fa fa-user fa-fw fa-sm text-brand"></i>
+                                    </div>
+                                    <?php 
                             }
                             ?>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="text-muted">Total Logs This Month</h5>
-                            <?php 
+                        <!-- ============================================================== -->
+                        <!-- end total followers   -->
+                        <!-- ============================================================== -->
+
+
+
+                                                            <!-- ============================================================== -->
+                        <!-- total followers   -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                <?php 
 require_once "php/db_conn.php";
 $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW())";
                     $query_run = mysqli_query($conn, $query);
@@ -131,16 +165,29 @@ $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW())";
                     {
                         $row = mysqli_fetch_assoc($query_run);
 ?>
-                            <div class="metric-value d-inline-block">
-                                <h1 class="mb-1"><?= $row['total']?></h1>
-                            </div>
-                            <?php 
+                                    <div class="d-inline-block">
+                                        <h5 class="text-muted">Total Logs <small>| YEAR</small></h5>
+                                        <h2 class="mb-0"><?= $row['total']?></h2>
+                                    </div>
+                                    <div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
+                                        <i class="fa fa-address-book fa-fw fa-sm text-brand"></i>
+                                    </div>
+                                    <?php 
                             }
                             ?>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                        <!-- ============================================================== -->
+                        <!-- end total followers   -->
+                        <!-- ============================================================== -->
+
+
+
+
+
+
+
 
 
 
@@ -152,28 +199,7 @@ $query = "SELECT COUNT(id) AS total FROM `dtr` WHERE YEAR(date) = YEAR(NOW())";
 
 
 
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <div class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
+
         </div>
         <!-- ============================================================== -->
         <!-- end wrapper  -->

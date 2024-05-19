@@ -44,6 +44,20 @@ while($row = $query->fetch_assoc()){
 
     }
 
+    $image_name = $row['image'];
+    
+    // Get the path of the uploads folder on the local server
+    $upload_folder = "uploads/";
+
+
+// Check if the image file exists in the uploads folder and create HTML code to display the image
+if (file_exists($upload_folder . $image_name)) {
+    $row['image_data'] = 'Image not found';
+} else {
+
+    $row['image_data'] = '<img src="'. $upload_folder . $image_name .'" style="width: 150px; height: 150px;" alt="">';
+}
+
 
     $data[] = $row;
 }

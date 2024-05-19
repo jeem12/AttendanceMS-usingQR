@@ -192,6 +192,8 @@
                                         <thead>
                                             <tr>
                                                 <th>EMPLOYEE ID</th>
+                                                <th>USERNAME</th>
+                                                <th>PASSWORD</th>
                                                 <th>FIRT NAME</th>
                                                 <th>MIDDLE NAME</th>
                                                 <th>LAST NAME</th>
@@ -222,28 +224,6 @@
             <!-- ============================================================== -->
 
 
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <div class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
         <!-- end wrapper  -->
@@ -284,6 +264,18 @@ employee = $('#employee').DataTable({
       columns: [
           {
               data: 'emp_id',
+              className: 'text-center',
+              defaultValue: 'No data available'
+
+          },
+          {
+              data: 'username',
+              className: 'text-center',
+              defaultValue: 'No data available'
+
+          },
+          {
+              data: 'pass',
               className: 'text-center',
               defaultValue: 'No data available'
 
@@ -348,7 +340,12 @@ employee = $('#employee').DataTable({
                     className: 'text-center',
                     render: function(data, type, row, meta) {
                         // console.log()
+                        if(data.username == 'admin'){
+                            return '<span class="badge badge-pill badge-warning">No Action Available</span>';
+                        }else{
                         return '<a class="me-2 btn btn-sm rounded-2 mb-1 gen_qr btn-primary" href="javascript:void(0)" data-id="' + (row.id) + '">Generate QR</a>';
+                        }
+                        
                     }
                 }
       ],
@@ -427,7 +424,6 @@ employee = $('#employee').DataTable({
 }
 //Load Data
 load_data()
-
 
         //add data
         $('#addData').submit(function (e) {
