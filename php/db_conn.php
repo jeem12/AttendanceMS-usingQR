@@ -1,3 +1,4 @@
+
 <?php
 date_default_timezone_set('Asia/Manila');
 $servername = "localhost";
@@ -5,11 +6,10 @@ $username = "root";
 $password = "";
 $db = "att";
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password,$db);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
+try {
+  $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+  echo "Connection failed: " . $e->getMessage();
 }
 ?>

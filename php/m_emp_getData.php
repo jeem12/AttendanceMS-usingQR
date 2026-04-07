@@ -1,61 +1,91 @@
-<?php 
+<?php
 require_once("db_conn.php");
 extract($_POST);
 
-$totalCount = $conn->query("SELECT * FROM `employee`")->num_rows;
-$search_where = "";
-if(!empty($search)){
-    $search_where = " where ";
-    $search_where .= " emp_id LIKE '%{$search['value']}%' ";
-    $search_where .= " OR password LIKE '%{$search['value']}%' ";
-    $search_where .= " OR f_name LIKE '%{$search['value']}%' ";
-    $search_where .= " OR m_name LIKE '%{$search['value']}%' ";
-    $search_where .= " OR l_name LIKE '%{$search['value']}%' ";
-    $search_where .= " OR b_day LIKE '%{$search['value']}%' ";
-    $search_where .= " OR comp_add LIKE '%{$search['value']}%' ";
-    $search_where .= " OR contact LIKE '%{$search['value']}%' ";
-    $search_where .= " OR gender LIKE '%{$search['value']}%' ";
-    $search_where .= " OR civil_stat LIKE '%{$search['value']}%' ";
-    $search_where .= " OR date_hired LIKE '%{$search['value']}%' ";
-    $search_where .= " OR department LIKE '%{$search['value']}%' ";
+$draw = $_POST['draw'] ?? 1;
+$start = $_POST['start'] ?? 0;
+$length = $_POST['length'] ?? 10;
+$searchValue = $_POST['search']['value'] ?? '';
+$orderColumnIndex = $_POST['order'][0]['column'] ?? 0;
+$orderDir = $_POST['order'][0]['dir'] ?? 'asc';
 
+// Columns for ordering
+$columns_arr = [
+    "emp_id",
+    "first_name",
+    "middle_name",
+    "last_name",
+    "birth_date",
+    "address",
+    "contact_no",
+    "gender",
+    "civil_status",
+    "date_hired",
+    "departments.name" // Use full table.column name for JOINed columns
+];
+
+// Total records (no filter)
+$totalCount = $conn->query("SELECT COUNT(*) FROM employees")->fetchColumn();
+
+// Filtering
+$search_where = '';
+$params = [];
+if(!empty($searchValue)){
+    $search_where = " WHERE employees.emp_id LIKE :search 
+        OR employees.first_name LIKE :search 
+        OR employees.middle_name LIKE :search 
+        OR employees.last_name LIKE :search 
+        OR employees.birth_date LIKE :search 
+        OR employees.address LIKE :search 
+        OR employees.contact_no LIKE :search 
+        OR employees.gender LIKE :search 
+        OR employees.civil_status LIKE :search 
+        OR employees.date_hired LIKE :search 
+        OR departments.name LIKE :search"; // Use actual column in JOIN
+    $params[':search'] = "%$searchValue%";
 }
-$columns_arr = array(
-                     "emp_id",
-                     "password",
-                     "f_name",
-                     "m_name",
-                     "l_name",
-                     "b_day",
-                     "comp_add",
-                     "contact",
-                     "gender",
-                     "civil_stat",
-                     "date_hired",
-                     "department",
-                    );
-$query = $conn->query("SELECT * FROM `employee` {$search_where} ORDER BY {$columns_arr[$order[0]['column']]} {$order[0]['dir']} limit {$length} offset {$start} ");
-$recordsFilterCount = $conn->query("SELECT * FROM `employee` {$search_where} ")->num_rows;
 
-$recordsTotal= $totalCount;
-$recordsFiltered= $recordsFilterCount;
-$data = array();
-$i= 1 + $start;
-while($row = $query->fetch_assoc()){
-    
-    $ciphering = "aes-256-ctr";
-    $option = 0;
-    $decryption_iv = '1234567890123456';
-    $decryption_key = 'devanshu';
+// Ordering
+$orderColumn = $columns_arr[$orderColumnIndex] ?? 'emp_id';
+$orderDir = strtolower($orderDir) === 'desc' ? 'DESC' : 'ASC';
 
-    $row['pass'] = openssl_decrypt($row['password'], $ciphering, $decryption_key, $option, $decryption_iv);
+// Main query with JOIN
+$sql = "SELECT employees.*, departments.name AS department_name
+        FROM employees
+        INNER JOIN departments ON employees.department_id = departments.id
+        $search_where
+        ORDER BY $orderColumn $orderDir
+        LIMIT :length OFFSET :start";
 
-    $data[] = $row;
-
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':length', (int)$length, PDO::PARAM_INT);
+$stmt->bindValue(':start', (int)$start, PDO::PARAM_INT);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val, PDO::PARAM_STR);
 }
-echo json_encode(array('draw'=>$draw,
-                       'recordsTotal'=>$recordsTotal,
-                       'recordsFiltered'=>$recordsFiltered,
-                       'data'=>$data
-                       )
-);
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Filtered count
+$sqlCount = "SELECT COUNT(*) 
+             FROM employees
+             INNER JOIN departments ON employees.department_id = departments.id
+             $search_where";
+$stmt2 = $conn->prepare($sqlCount);
+foreach ($params as $key => $val) {
+    $stmt2->bindValue($key, $val, PDO::PARAM_STR);
+}
+$stmt2->execute();
+$recordsFiltered = $stmt2->fetchColumn();
+
+// Add fullname
+foreach ($data as &$row) {
+    $row['fullname'] = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'];
+}
+
+echo json_encode([
+    'draw' => (int)$draw,
+    'recordsTotal' => (int)$totalCount,
+    'recordsFiltered' => (int)$recordsFiltered,
+    'data' => $data
+]);
