@@ -75,12 +75,15 @@ http://localhost/attendance-qr/
 ### Usage
 1. Admin Login
 - Use the default admin credentials or create a new admin account.
+
 2. Employee Management
--Add employees and generate QR codes.
+- Add employees and generate QR codes.
+
 3. Mark Attendance
--Employees scan their QR codes using the web scanner or mobile camera.
+- Employees scan their QR codes using the web scanner or mobile camera.
+
 4. View Reports
--Generate and export reports by date or department.
+- Generate and export reports by date or department.
 
 ### License
 
